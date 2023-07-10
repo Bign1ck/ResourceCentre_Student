@@ -195,6 +195,7 @@ public class ResourceCentreTest {
 		String dueDate = "8-8-2020";
 		boolean Valid_loan_cb = false;
 		Boolean return_cb = false;
+		Boolean checked_in = true;
 
 		if(chromebookList.isEmpty())
 		chromebookList.add(0, cb1);
@@ -208,16 +209,17 @@ public class ResourceCentreTest {
 				cb.setIsAvailable(Valid_loan_cb);	
 			}
 			else{
-				Valid_loan_cb=true;
+				Valid_loan_cb = true;
+				checked_in = false;
 				break;
 			}
 		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
-		if(Valid_loan_cb){
-			ResourceCentre.doReturnChromebook(chromebookList,tag);
+		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
 			//Test if the return of CB0011 is successful after returning
 			assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
+			checked_in = true;
 		}
 
 		// Test case 2: Return an item that is not loaned out
