@@ -194,8 +194,9 @@ public class ResourceCentreTest {
 		String tag = "CB0011";
 		String dueDate = "8-8-2020";
 		boolean Valid_loan_cb = false;
-		Boolean return_cb = false;
+		Boolean Valid_return_cb = false;
 		Boolean checked_in = true;
+	
 
 		if(chromebookList.isEmpty())
 		chromebookList.add(0, cb1);
@@ -205,36 +206,34 @@ public class ResourceCentreTest {
 		
 		// Test case 1: Return a loaned out item
 		for (Chromebook cb : chromebookList){
-			if( !(cb.getAssetTag().equalsIgnoreCase(tag) && ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)) ){
-				cb.setIsAvailable(Valid_loan_cb);	
-			}
-			else{
-				Valid_loan_cb = true;
+			Valid_loan_cb = (cb.getAssetTag().equalsIgnoreCase(tag))  &&  (ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate));
+			if( Valid_loan_cb ){
 				break;
 			}
+			cb.setIsAvailable(Valid_loan_cb);		
 		}
 		assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
-		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
-			//Test if the return of CB0011 is successful after returning
-			assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
+		Valid_return_cb = Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag) && chromebookList.get(0).getIsAvailable();
+		if(Valid_return_cb){
 			checked_in = true;
 		}
+		assertTrue("Test that CB0011 is now available.",Valid_return_cb);
 
 		// Test case 2: Return an item that is not loaned out
-		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
-		assertFalse("Test that the return fails.", return_cb);
+		Valid_return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
+		assertFalse("Test that the return fails.", Valid_return_cb);
 		
 		// Test case 3: Return an item that does not exist 
-		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0099");
-		assertFalse("Test that the return fails.", return_cb);
+		Valid_return_cb= ResourceCentre.doReturnChromebook(chromebookList, "CB0099");
+		assertFalse("Test that the return fails.", Valid_return_cb);
 		
 		//  Test case 4: Checked in when student returns loaned item
-		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
+		if(Valid_return_cb){
 			checked_in = true;
-			assertTrue("Test if CB0011 is successfully checked in", checked_in);
 		}
+		assertTrue("Test if CB0011 is successfully checked in", checked_in);
 	}
 
 	@After
