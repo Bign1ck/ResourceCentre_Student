@@ -210,7 +210,6 @@ public class ResourceCentreTest {
 			}
 			else{
 				Valid_loan_cb = true;
-				checked_in = false;
 				break;
 			}
 		}
