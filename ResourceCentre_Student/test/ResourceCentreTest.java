@@ -66,8 +66,26 @@ public class ResourceCentreTest {
 
 	@Test
 	public void testAddChromebook() {
-		//fail("Not yet implemented");
-		// write your code here 
+		// Item list is not null and it is empty
+		assertNotNull("Test if there is a valid Chromebook arraylist to add to", chromebookList);
+		assertEquals("Test that the Chromebook arraylist is empty.", 0, chromebookList.size());
+		// Given an empty list, after adding 1 item, the size of the list is 1
+		ResourceCentre.addChromebook(chromebookList, cb1);
+		assertEquals("Test that the Chromebook arraylist size is 1.", 1, chromebookList.size());
+		// Add an item
+		ResourceCentre.addChromebook(chromebookList, cb2);
+		assertEquals("Test that the Chromebook arraylist size is now 2.", 2, chromebookList.size());
+		// Add an item
+		ResourceCentre.addChromebook(chromebookList, cb3);
+		assertEquals("Test that the Chromebook arraylist size is now 3.", 3, chromebookList.size());
+		assertSame("Test that Chromebook is added to the end of the list.", cb3, chromebookList.get(2));
+		// Add an item that already exists in the list
+		ResourceCentre.addChromebook(chromebookList, cb2);
+		assertEquals("Test that the Chromebook arraylist size is unchanged.", 3, chromebookList.size());
+		// Add an item that has missing detail
+		Chromebook cb_missing = new Chromebook("CB0011", "", "Mac OS");
+		ResourceCentre.addChromebook(chromebookList, cb_missing);
+		assertEquals("Test that the Chromebook arraylist size is unchanged.", 3, chromebookList.size());
 	}
 
 	@Test
