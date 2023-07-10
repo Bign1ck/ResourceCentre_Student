@@ -191,6 +191,37 @@ public class ResourceCentreTest {
 	public void testDoReturnChromebook() {
 		//fail("Not yet implemented");
 		// write your code here
+		String tag = "CB0011";
+		String dueDate = "8-8-2020";
+		boolean Valid_loan_cb = false;
+		Boolean Return_cb = false;
+		Boolean isReturned_cb = false;
+
+		// Test case 1: Return a loaned out item
+		for (Chromebook cb : chromebookList){
+			if(cb.getAssetTag().equalsIgnoreCase(tag)){
+				if(ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)){
+					Valid_loan_cb=true;
+				}
+			}
+		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
+		
+
+		if(Valid_loan_cb){
+			Return_cb = ResourceCentre.doReturnChromebook(chromebookList,tag);
+		}assertTrue("Test if the return of CB0011 is successful.", Return_cb);
+
+		assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
+
+		// Test case 2: Return an item that is not loaned out
+		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
+		assertFalse("Test that the return fails.", isReturned_cb);
+		
+		// Test case 3: Return an item that does not exist 
+		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0013");
+		assertFalse("Test that the return fails.", isReturned_cb);
+			
+
 	}
 
 	@After
