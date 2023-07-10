@@ -217,7 +217,8 @@ public void testRetrieveAllChromebook() {
 		String tag = "CB0011";
 		String dueDate = "8-8-2020";
 		boolean Valid_loan_cb = false;
-		Boolean isReturned_cb = false;
+		Boolean return_cb = false;
+		Boolean checked_in = true;
 
 		if(chromebookList.isEmpty())
 		chromebookList.add(0, cb1);
@@ -227,33 +228,35 @@ public void testRetrieveAllChromebook() {
 		
 		// Test case 1: Return a loaned out item
 		for (Chromebook cb : chromebookList){
-			if(cb.getAssetTag().equalsIgnoreCase(tag)){
-				if(ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)){
-					Valid_loan_cb=true;
-					cb.setIsAvailable(Valid_loan_cb);
-					break;
-				}
+			if( !(cb.getAssetTag().equalsIgnoreCase(tag) && ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)) ){
+				cb.setIsAvailable(Valid_loan_cb);	
+			}
+			else{
+				Valid_loan_cb = true;
+				checked_in = false;
+				break;
 			}
 		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
+
 		if(Valid_loan_cb){
 			ResourceCentre.doReturnChromebook(chromebookList,tag);
 			assertTrue("Test if the return of CB0011 is successful.",cb1.getIsAvailable());
-		}
-		//"Test if the return of CB0011 is successful."
-		
 
+		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
+			//Test if the return of CB0011 is successful after returning
+			assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
+			checked_in = true;
 		assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
 
 		// Test case 2: Return an item that is not loaned out
-		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
-		assertFalse("Test that the return fails.", isReturned_cb);
+		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
 		
 		// Test case 3: Return an item that does not exist 
-		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0013");
-		assertFalse("Test that the return fails.", isReturned_cb);
-			
+		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0013");
+		assertFalse("Test that the return fails.", return_cb);
+		}}
 
 	}
 
