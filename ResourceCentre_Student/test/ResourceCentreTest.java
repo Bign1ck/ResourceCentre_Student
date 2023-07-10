@@ -126,10 +126,33 @@ public class ResourceCentreTest {
 	}
 
 	@Test
-	public void testRetrieveAllChromebook() {
-		//fail("Not yet implemented");
-		// write your code here
-	}
+public void testRetrieveAllChromebook() {
+    // Test if the Chromebook ArrayList is not null
+    assertNotNull("Test if there is a valid Chromebook ArrayList to add to", chromebookList);
+    
+    // Clear the Chromebook list
+    chromebookList.clear();
+    
+    // Add sample Chromebooks to the list
+    Chromebook chromebook1 = new Chromebook("CB0011", "My Google Chromebook 1st", "Mac OS");
+    Chromebook chromebook2 = new Chromebook("CB0012", "SAMSUNG Chromebook 4+", "Win 10");
+    chromebookList.add(chromebook1);
+    chromebookList.add(chromebook2);
+    
+    // Retrieve the Chromebook details
+    String allChromebook = ResourceCentre.retrieveAllChromebook(chromebookList);
+    
+    // Create a StringBuilder for the expected output
+    StringBuilder expectedOutput = new StringBuilder();
+    for (Chromebook chromebook : chromebookList) {
+        expectedOutput.append(String.format("%-10s %-30s %-10s\n", chromebook.getAssetTag(),
+                chromebook.getDescription(), ResourceCentre.showAvailability(true)));
+    }
+    // Assert that the expected output matches the actual output
+    assertEquals("Test that the display is correct.", expectedOutput.toString(), allChromebook);
+}
+
+
 
 	@Test
 	public void testDoLoanCamcorder() {
@@ -194,7 +217,7 @@ public class ResourceCentreTest {
 		String tag = "CB0011";
 		String dueDate = "8-8-2020";
 		boolean Valid_loan_cb = false;
-		Boolean return_cb = false;
+		Boolean isReturned_cb = false;
 
 		if(chromebookList.isEmpty())
 		chromebookList.add(0, cb1);
@@ -204,30 +227,34 @@ public class ResourceCentreTest {
 		
 		// Test case 1: Return a loaned out item
 		for (Chromebook cb : chromebookList){
-			if( !(cb.getAssetTag().equalsIgnoreCase(tag) && ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)) ){
-				cb.setIsAvailable(Valid_loan_cb);	
-			}
-			else{
-				Valid_loan_cb=true;
-				break;
+			if(cb.getAssetTag().equalsIgnoreCase(tag)){
+				if(ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)){
+					Valid_loan_cb=true;
+					cb.setIsAvailable(Valid_loan_cb);
+					break;
+				}
 			}
 		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
 		if(Valid_loan_cb){
 			ResourceCentre.doReturnChromebook(chromebookList,tag);
-			//Test if the return of CB0011 is successful after returning
-			assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
+			assertTrue("Test if the return of CB0011 is successful.",cb1.getIsAvailable());
 		}
+		//"Test if the return of CB0011 is successful."
+		
+
+		assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
 
 		// Test case 2: Return an item that is not loaned out
-		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
-		assertFalse("Test that the return fails.", return_cb);
+		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0011");
+		assertFalse("Test that the return fails.", isReturned_cb);
 		
 		// Test case 3: Return an item that does not exist 
-		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0099");
-		assertFalse("Test that the return fails.", return_cb);
-		
+		isReturned_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0013");
+		assertFalse("Test that the return fails.", isReturned_cb);
+			
+
 	}
 
 	@After
