@@ -204,21 +204,19 @@ public class ResourceCentreTest {
 		
 		// Test case 1: Return a loaned out item
 		for (Chromebook cb : chromebookList){
-			if(cb.getAssetTag().equalsIgnoreCase(tag)){
-				if(ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)){
-					Valid_loan_cb=true;
-					break;
-				}
-			}else{
-				Valid_loan_cb= false;
-				cb.setIsAvailable(Valid_loan_cb);
+			if( !(cb.getAssetTag().equalsIgnoreCase(tag) && ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)) ){
+				cb.setIsAvailable(Valid_loan_cb);	
+			}
+			else{
+				Valid_loan_cb=true;
+				break;
 			}
 		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
 		if(Valid_loan_cb){
 			ResourceCentre.doReturnChromebook(chromebookList,tag);
-		//Test if the return of CB0011 is successful after returning
+			//Test if the return of CB0011 is successful after returning
 			assertTrue("Test that CB0011 is now available.",chromebookList.get(0).getIsAvailable());
 		}
 
