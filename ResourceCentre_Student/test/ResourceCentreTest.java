@@ -207,9 +207,11 @@ public class ResourceCentreTest {
 			if(cb.getAssetTag().equalsIgnoreCase(tag)){
 				if(ResourceCentre.doLoanChromebook(chromebookList, tag, dueDate)){
 					Valid_loan_cb=true;
-					cb.setIsAvailable(Valid_loan_cb);
 					break;
 				}
+			}else{
+				Valid_loan_cb= false;
+				cb.setIsAvailable(Valid_loan_cb);
 			}
 		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
