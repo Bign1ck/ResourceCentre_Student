@@ -149,14 +149,24 @@ public class ResourceCentre {
 
 	public static String retrieveAllChromebook(ArrayList<Chromebook> chromebookList) {
 		String output = "";
-		// write your code here
+	
+		for (int i = 0; i < chromebookList.size(); i++) {
+			if (chromebookList.get(i).getIsAvailable()) {
+				output += String.format("%-10s %-30s %-10s\n", chromebookList.get(i).getAssetTag(),
+						chromebookList.get(i).getDescription(),
+						ResourceCentre.showAvailability(chromebookList.get(i).getIsAvailable()));
+			}
+		}
 		return output;
 	}
+	
 	public static void viewAllChromebook(ArrayList<Chromebook> chromebookList) {
-		// write your code here
-		String output = retrieveAllChromebook(chromebookList);
+		ResourceCentre.setHeader("CHROMEBOOK LIST");
+		String output = String.format("%-10s %-30s %-10s\n", "ASSET TAG", "DESCRIPTION", "AVAILABLE");
+		output += retrieveAllChromebook(chromebookList);
 		System.out.println(output);
 	}
+	
 
 	//================================= Option 2 Add an item (CRUD - Create) =================================
 	public static Camcorder inputCamcorder() {
@@ -237,11 +247,33 @@ public class ResourceCentre {
 	}
 	
 	public static boolean doLoanChromebook(ArrayList<Chromebook> chromebookList, String tag, String dueDate) {
-		// write your code here
-		return true;
+		boolean isLoaned = false;
+
+		if (tag.isEmpty() || dueDate.isEmpty())
+			return false;
+		
+		for (int i = 0; i < chromebookList.size(); i++) {
+			if (tag.equalsIgnoreCase(chromebookList.get(i).getAssetTag())
+					&& chromebookList.get(i).getIsAvailable() == true) {
+				
+				chromebookList.get(i).setIsAvailable(false);
+				chromebookList.get(i).setDueDate(dueDate);
+				
+				isLoaned = true;
+			}
+		}
+		return isLoaned;
 	}
 	public static void loanChromebook(ArrayList<Chromebook> chromebookList) {
-		// write your code here		
+		ResourceCentre.viewAllChromebook(chromebookList);
+		String tag = Helper.readString("Enter asset tag > ");
+		String due = Helper.readString("Enter due date > ");
+		Boolean isLoaned =doLoanChromebook(chromebookList, tag, due);
+		if (isLoaned == false) {
+			System.out.println("Invalid asset tag");
+		} else {
+			System.out.println("Chromebook " + tag + " loaned out");
+		}
 	}
 	
 	//================================= Option 4 Return an item (CRUD - Update)=================================
