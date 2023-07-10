@@ -213,7 +213,8 @@ public class ResourceCentreTest {
 				checked_in = false;
 				break;
 			}
-		}assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
+		}
+		assertTrue("Test if CB0011 is successfully loaned out.", Valid_loan_cb);
 		
 
 		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
@@ -230,6 +231,11 @@ public class ResourceCentreTest {
 		return_cb = ResourceCentre.doReturnChromebook(chromebookList, "CB0099");
 		assertFalse("Test that the return fails.", return_cb);
 		
+		//  Test case 4: Checked in when student returns loaned item
+		if(Valid_loan_cb && ResourceCentre.doReturnChromebook(chromebookList,tag)){
+			checked_in = true;
+			assertTrue("Test if CB0011 is successfully checked in", checked_in);
+		}
 	}
 
 	@After
