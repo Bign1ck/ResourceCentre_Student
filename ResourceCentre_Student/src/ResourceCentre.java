@@ -313,13 +313,15 @@ public class ResourceCentre {
 		if (tag.isEmpty())
 			return false;
 
-		for (int i = 0; i < chromebookList.size(); i++) {
-			if (tag.equalsIgnoreCase(chromebookList.get(i).getAssetTag())
-					&& chromebookList.get(i).getIsAvailable() == false) {
-				chromebookList.get(i).setIsAvailable(true);
-				chromebookList.get(i).setDueDate("");
+		for (Chromebook cb : chromebookList) {
+			boolean CheckAssetTag = tag.equalsIgnoreCase(cb.getAssetTag()); 
+			boolean isAvailable = cb.getIsAvailable();
+			boolean ReturnSuccessful = CheckAssetTag && isAvailable == false;
+			
+			if(ReturnSuccessful){
+				cb.setIsAvailable(true);
+				cb.setDueDate("");
 				isReturned = true;
-
 			}
 		}
 		return isReturned;
