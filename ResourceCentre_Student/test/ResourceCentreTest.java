@@ -127,6 +127,32 @@ public class ResourceCentreTest {
 
 	@Test
 	public void testRetrieveAllChromebook() {
+		// Test Case 1: Retrieve from an empty list
+		assertNotNull("Test if there is a valid Chromebook arraylist to retrieve from", chromebookList);
+		assertEquals("Test that the Chromebook arraylist is empty.", 0, chromebookList.size());
+
+		String allChromebook = ResourceCentre.retrieveAllChromebook(chromebookList);
+		String testOutput = "";
+		assertEquals("Test that nothing is displayed when retrieving from an empty list", testOutput, allChromebook);
+
+		// Test Case 2: Retrieve from a list with items
+		ResourceCentre.addChromebook(chromebookList, cb1);
+		ResourceCentre.addChromebook(chromebookList, cb2);
+		assertEquals("Test that the Chromebook arraylist size is 2.", 2, chromebookList.size());
+
+		allChromebook = ResourceCentre.retrieveAllChromebook(chromebookList);
+		testOutput = String.format("%-10s %-30s %-10s\n", "CB0011", "My Google Chromebook 1st", "Yes");
+		testOutput += String.format("%-10s %-30s %-10s\n", "CB0012", "SAMSUNG Chromebook 4+", "Yes");
+		assertEquals("Test that the retrieved Chromebook details are correct.", testOutput, allChromebook);
+
+		// Test Case 3: Retrieve from a list with items, including unavailable ones
+		cb2.setIsAvailable(false);
+		assertEquals("Test that the Chromebook arraylist size is 2.", 2, chromebookList.size());
+
+		allChromebook = ResourceCentre.retrieveAllChromebook(chromebookList);
+		testOutput = String.format("%-10s %-30s %-10s\n", "CB0011", "My Google Chromebook 1st", "Yes");
+		testOutput += String.format("%-10s %-30s %-10s\n", "CB0012", "SAMSUNG Chromebook 4+", "No");
+		assertEquals("Test that the retrieved Chromebook details are correct.", testOutput, allChromebook);
 	}
 
 	@Test
